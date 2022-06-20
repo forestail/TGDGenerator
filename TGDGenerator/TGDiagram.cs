@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 //using Microsoft.VisualBasic;
 
@@ -10,15 +11,16 @@ namespace TGDGenerator
     internal class TGDiagram
     {
         private string? ChordName { get; set; }
-        private string? Position { get; set; }
+        private string Position { get; set; }
         private string? Fingering { get; set; }
 
         private string[]? PositionArray { get; set; }
 
+        private int? Root { get; set; }
        
 
 
-        public TGDiagram(string chordname, string position, string fingering)
+        public TGDiagram(string? chordname, string position, string? fingering, int? root)
         {
             ChordName = chordname;
             //Position = Strings.StrConv(position, VbStrConv.Narrow, 0);
@@ -28,13 +30,12 @@ namespace TGDGenerator
 
             Position = position;
             Fingering = fingering;
-;
+            ;
             if (Position != null)
             {
                 PositionArray = Position.Split(",");
             }
-            
-
+            Root = root;
         }
 
 
@@ -135,9 +136,9 @@ namespace TGDGenerator
 
 
             // フィンガリング
-            if (Fingering != null)
+            if (Fingering != null && Regex.Replace(Fingering, @"[^0-9]", "") != "")
             {
-                string tmpFingering = Fingering;
+                string tmpFingering = Regex.Replace(Fingering, @"[^0-9]", "");
                 string fingerNum;
                 result += "  ";
                 foreach (string str in PositionArray)
@@ -285,7 +286,14 @@ namespace TGDGenerator
                 int rootNoteIndex;
                 int dinterval;
 
-                rootNoteIndex = Common.RootIndex(Position);
+                if (Root != null)
+                {
+                    rootNoteIndex = (int)Root;
+                }
+                else
+                {
+                    rootNoteIndex = Common.RootIndex(Position);
+                }
 
                 for (int i = 0; i < 6; i++)
                 {

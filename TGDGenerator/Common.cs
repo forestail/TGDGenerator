@@ -16,6 +16,8 @@ namespace TGDGenerator
                                         {"B","C","C#","D","D#","E", "F", "F#", "G", "G#","A","A#","B","C","C#","D","D#","E", "F", "F#", "G", "G#","A","A#" },
                                         {"E","F","F#","G","G#","A","A#","B","C","C#","D","D#","E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"  } };
 
+        public static readonly string[] RootNameBase = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+
         public static Dictionary<string, int> interval = new Dictionary<string, int>();
         
         public static void Initialize()

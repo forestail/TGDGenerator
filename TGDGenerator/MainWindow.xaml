@@ -4,9 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:local="clr-namespace:TGDGenerator"
         mc:Ignorable="d"
-        Title="Ted Greene Chord Diagram Generator" Height="550" Width="600" ResizeMode="NoResize">
+        Title="Ted Greene Chord Diagram Generator"
+        Height="550" Width="600" 
+        ResizeMode="NoResize"
+        ShowTitleBar="True"
+        TitleCharacterCasing="Normal"         
+        >
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button ToolTip="Settings" Command="{Binding SettingsCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <icon:PackIconModern Width="22" Height="22" Kind="Settings" />
+                    <TextBlock Text="Settings" VerticalAlignment="Center" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="79*"/>
@@ -31,8 +47,8 @@
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label_root" Content="Root" FontSize="20" Margin="0,0,10,0"/>
-                                <ComboBox x:Name="comboBox" Width="60" FontSize="18" SelectedIndex="{Binding Path=Root}">
-                                    <ComboBoxItem Content="C"/>
+                                <ComboBox x:Name="comboBox_root" Width="60" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
+                                    <!--<ComboBoxItem Content="C"/>
                                     <ComboBoxItem Content="C#"/>
                                     <ComboBoxItem Content="D"/>
                                     <ComboBoxItem Content="D#"/>
@@ -43,7 +59,7 @@
                                     <ComboBoxItem Content="G#"/>
                                     <ComboBoxItem Content="A"/>
                                     <ComboBoxItem Content="A#"/>
-                                    <ComboBoxItem Content="B"/>
+                                    <ComboBoxItem Content="B"/>-->
                                 </ComboBox>
                             </StackPanel>
                         </StackPanel>

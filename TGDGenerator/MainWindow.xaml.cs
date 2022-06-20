@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
+using System.Diagnostics;
 
 namespace TGDGenerator
 {
@@ -116,8 +117,8 @@ namespace TGDGenerator
 
 
         //ルート
-        private int root;
-        public int Root
+        private int? root;
+        public int? Root
         {
             get
             {
@@ -127,6 +128,21 @@ namespace TGDGenerator
             {
                 root = value;
                 OnPropertyChanged("Root");
+            }
+        }
+
+
+        private string[] rootName = new string[12];
+        public string[] RootName
+        {
+            get
+            {
+                return rootName;
+            }
+            set
+            {
+                rootName = value;
+                OnPropertyChanged("RootName");
             }
         }
 
@@ -143,6 +159,8 @@ namespace TGDGenerator
             this.DataContext = this;
 
             Common.Initialize();
+            Array.Copy(Common.RootNameBase, RootName, Common.RootNameBase.Length);
+
         }
 
         private void button_generate_Click(object sender, RoutedEventArgs e)
@@ -151,7 +169,7 @@ namespace TGDGenerator
             //if (Position != null || Position == "") return;
 
             //TGDiagram tgd = new TGDiagram("test", "8,x,9,9,x,x", "");
-            TGDiagram tgd = new TGDiagram(ChordName, Position, Fingering);
+            TGDiagram tgd = new TGDiagram(ChordName, Position, Fingering, Root);
 
             //Console.WriteLine(tgd.IsValid());
 
@@ -159,6 +177,27 @@ namespace TGDGenerator
 
             if (tgd.IsValid())
             {
+                if(Root == null)
+                {
+                    
+                    for (int i=0; i< 12; i++)
+                    {
+                        if (i == Common.RootIndex(Position))
+                        {
+                            RootName[i] = Common.RootNameBase[i] + " ●";
+                        }
+                        else if (tgd.LetterNotations().Contains(Common.RootNameBase[i]))
+                        {
+                            RootName[i] = Common.RootNameBase[i] + " ○";
+                        }
+                        else
+                        {
+                            RootName[i] = Common.RootNameBase[i];
+                        }
+                    }
+                    
+                    Root = Common.RootIndex(Position);
+                }
 
                 TGDText = tgd.Stringize();
                 if (FlgLetterNotation)
@@ -260,10 +299,24 @@ namespace TGDGenerator
 
         private void textBox_position_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Position != null)
+            //if (Position != null)
+            //{
+            //    Root = Common.RootIndex(Position);
+            //}
+            //Root = null;
+
+
+            for (int i = 0; i < 12; i++)
             {
-                Root = Common.RootIndex(Position);
+                RootName[i] = Common.RootNameBase[i];
+                //RootName[i] = "hoge";
             }
+            
+
+            Root = null;
+            
+            //Array.Copy(Common.RootNameBase, RootName, Common.RootNameBase.Length);
+            
         }
     }
 }
