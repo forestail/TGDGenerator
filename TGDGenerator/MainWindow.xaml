@@ -37,8 +37,18 @@
 
                         <mah:Tile x:Name="tile" Content="Gererator" Height="35" Width="290" FontSize="24"/>
 
-                        <Label x:Name="label1" Content="Chord Name" FontSize="20" Margin="10,0,10,0" />
-                        <TextBox x:Name="textBox_name" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding ChordName}" VerticalAlignment="Top" Width="241" FontSize="20" />
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <Label x:Name="label1" Content="Chord Name" FontSize="20" Margin="10,0,10,0" />
+                                <TextBox x:Name="textBox_name" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding ChordName}" Width="182" FontSize="20" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Label x:Name="auto_naming" Content="Auto" FontSize="20" Margin="0,0,10,0"/>
+                                <mah:ToggleSwitch x:Name="SwitchAutoNaming"  Width="66" Margin="10,0,10,0" IsOn="{Binding Path=FlgAutoNaming}"/>
+                            </StackPanel>
+                        </StackPanel>
+
 
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
@@ -47,20 +57,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label_root" Content="Root" FontSize="20" Margin="0,0,10,0"/>
-                                <ComboBox x:Name="comboBox_root" Width="60" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
-                                    <!--<ComboBoxItem Content="C"/>
-                                    <ComboBoxItem Content="C#"/>
-                                    <ComboBoxItem Content="D"/>
-                                    <ComboBoxItem Content="D#"/>
-                                    <ComboBoxItem Content="E"/>
-                                    <ComboBoxItem Content="F"/>
-                                    <ComboBoxItem Content="F#"/>
-                                    <ComboBoxItem Content="G"/>
-                                    <ComboBoxItem Content="G#"/>
-                                    <ComboBoxItem Content="A"/>
-                                    <ComboBoxItem Content="A#"/>
-                                    <ComboBoxItem Content="B"/>-->
-                                </ComboBox>
+                                <ComboBox x:Name="comboBox_root" Width="75" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
                             </StackPanel>
                         </StackPanel>
 

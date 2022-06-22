@@ -18,6 +18,7 @@ namespace TGDGenerator
 
         private int? Root { get; set; }
        
+        private string? Interval { get; set; }
 
 
         public TGDiagram(string? chordname, string position, string? fingering, int? root)
@@ -30,12 +31,15 @@ namespace TGDGenerator
 
             Position = position;
             Fingering = fingering;
-            ;
+            
             if (Position != null)
             {
                 PositionArray = Position.Split(",");
             }
             Root = root;
+
+            
+
         }
 
 
@@ -47,26 +51,26 @@ namespace TGDGenerator
             string result = string.Empty;
 
 
-            //コードネーム
-            if (ChordName != null && ChordName.Trim().Length > 0)
-            {
-                if (Common.GraphicalLength(ChordName) <= 12)
-                {
-                    result += "  " + Common.Centering(ChordName, 12);
-                }
-                else if (Common.GraphicalLength(ChordName) == 13)
-                {
-                    result += " " + Common.Centering(ChordName, 12);
-                }
-                else
-                {
-                    result += Common.Centering(ChordName, 12);
-                }
-            }
+            ////コードネーム
+            //if (ChordName != null && ChordName.Trim().Length > 0)
+            //{
+            //    if (Common.GraphicalLength(ChordName) <= 12)
+            //    {
+            //        result += "  " + Common.Centering(ChordName, 12);
+            //    }
+            //    else if (Common.GraphicalLength(ChordName) == 13)
+            //    {
+            //        result += " " + Common.Centering(ChordName, 12);
+            //    }
+            //    else
+            //    {
+            //        result += Common.Centering(ChordName, 12);
+            //    }
+            //}
 
 
                         
-            result += "\r\n";
+            //result += "\r\n";
 
 
 
@@ -110,6 +114,14 @@ namespace TGDGenerator
                         result += "  ";
                     }
                 }
+                else if (MinFret() + i == 3 || MinFret() + i == 5 || MinFret() + i == 9 || MinFret() + i == 15 || MinFret() + i == 17)
+                {
+                    result += " *";
+                }
+                else if (MinFret() + i == 7 || MinFret() + i == 12)
+                {
+                    result += "**";
+                }
                 else
                 {
                     result += "  ";
@@ -150,30 +162,6 @@ namespace TGDGenerator
 
                         result += fingerNum + " ";
 
-                        //if (fingerNum == "1")
-                        //{
-                        //    result += "１";
-                        //}
-                        //else if (fingerNum == "2")
-                        //{
-                        //    result += "２";
-                        //}
-                        //else if (fingerNum == "3")
-                        //{
-                        //    result += "３";
-                        //}
-                        //else if (fingerNum == "4")
-                        //{
-                        //    result += "４";
-                        //}
-                        //else if (fingerNum == "5")
-                        //{
-                        //    result += "５";
-                        //}
-                        //else if (fingerNum == "0")
-                        //{
-                        //    result += "０";
-                        //}
                         tmpFingering = tmpFingering.Remove(0, 1);
                     }
                     else
@@ -369,7 +357,207 @@ namespace TGDGenerator
 
         }
 
+        public void GetInterval()
+        {
+            string result = string.Empty;
+            if (PositionArray != null)
+            {
 
+                int testNoteIndex;
+                int rootNoteIndex;
+                int dinterval;
+
+                if (Root != null)
+                {
+                    rootNoteIndex = (int)Root;
+                }
+                else
+                {
+                    rootNoteIndex = Common.RootIndex(Position);
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    if (PositionArray[i] != "x")
+                    {
+
+                        testNoteIndex = Common.NoteIndex(Common.Fretboard[i, int.Parse(PositionArray[i])]);
+
+                        if (testNoteIndex < rootNoteIndex)
+                        {
+                            dinterval = testNoteIndex + 12 - rootNoteIndex;
+                        }
+                        else
+                        {
+                            dinterval = testNoteIndex - rootNoteIndex;
+                        }
+
+
+                        result = result + "/" + dinterval + "/";
+
+
+                    }
+
+                }
+
+            }
+
+            Interval = result;
+
+        }
+
+
+
+        public string GetAutoName()
+        {
+
+            int rootNoteIndex;
+            
+
+            if (Root != null)
+            {
+                rootNoteIndex = (int)Root;
+            }
+            else
+            {
+                rootNoteIndex = Common.RootIndex(Position);
+            }
+
+            string result = Common.RootNameBase[rootNoteIndex];
+
+            GetInterval();
+
+            if (Interval != null)
+            {
+                if (Interval.Contains("/4/"))   //III
+                {
+                    if (Interval.Contains("/8/"))   //#V
+                    {
+                        result += "aug";
+                        Interval = Interval.Replace("/4/", "");
+                        Interval = Interval.Replace("/8/", "");
+                    }
+                    else
+                    {
+                        if (Interval.Contains("/7/"))   //V
+                        {
+                            //result += "maj";
+                        }
+                        else
+                        {
+                            //result += "maj";
+                        }
+                    }
+
+                    if (Interval.Contains("/5/"))   //IV
+                    {
+                        result += "11";
+                    }
+
+                }
+                else
+                {
+                    if (Interval.Contains("/3/"))   //bIII
+                    {
+                        if (Interval.Contains("/6/"))   //bV
+                        {
+                            result += "dim";
+                            Interval = Interval.Replace("/3/", "");
+                            Interval = Interval.Replace("/6/", "");
+
+                            if (Interval.Contains("/9/"))   //VI
+                            {
+                                result += "7";
+                                Interval = Interval.Replace("/9/","");
+                            }
+                        }
+                        else
+                        {
+                            if (Interval.Contains("/7/"))   //V
+                            {
+                                result += "m";
+
+                            }
+                            else
+                            {
+                                //Vの省略
+                                result += "m";
+                            }
+                        }
+
+                        if (Interval.Contains("/5/"))   //IV
+                        {
+                            result += "11";
+                            Interval = Interval.Replace("/5/", "");
+                        }
+
+                    }
+                    else
+                    {
+                        if (Interval.Contains("/5/"))   //IV
+                        {
+                            result += "sus4";
+                            Interval = Interval.Replace("/5/", "");
+                        }
+                    }
+                }
+
+
+                if (Interval.Contains("/10/"))  //7
+                {
+                    result += "7";
+                    if (Interval.Contains("/8/"))   //#V
+                    {
+                        result += "b13";
+                    }
+                    if (Interval.Contains("/9/"))   //VI
+                    {
+                        result += "13";
+                    }
+
+                }
+                else
+                {
+                    if (Interval.Contains("/9/"))   //VI
+                    {
+                        result += "6";
+                    }
+                }
+
+                if (Interval.Contains("/11/"))  //M7
+                {
+                    result += "M7";
+                }
+
+                if (Interval.Contains("/1/"))   //b9
+                {
+                    result += "b9";
+                }
+
+                if (Interval.Contains("/2/"))   //9
+                {
+                    result += "9";
+                }
+
+                //bV判定
+                if (Interval.Contains("/6/") && !Interval.Contains("/7/"))   //bVがあってVがない
+                {
+                    result += "b5";
+                    Interval = Interval.Replace("/6/", "");
+                }
+
+                if (Interval.Contains("/6/"))   //bV
+                {
+                    result += "#11";
+                }
+
+
+            }
+
+            
+
+            return result;
+        }
 
     }
 }

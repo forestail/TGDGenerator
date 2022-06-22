@@ -115,6 +115,23 @@ namespace TGDGenerator
         }
 
 
+        private bool flgAutoNaming;
+        public bool FlgAutoNaming
+        {
+            get
+            {
+                return flgAutoNaming;
+            }
+            set
+            {
+                if (value != FlgAutoNaming)
+                {
+                    flgAutoNaming = value;
+                    OnPropertyChanged("FlgAutoNaming");
+                }
+            }
+        }
+
 
         //ルート
         private int? root;
@@ -165,41 +182,75 @@ namespace TGDGenerator
 
         private void button_generate_Click(object sender, RoutedEventArgs e)
         {
-            //Console.WriteLine()
-            //if (Position != null || Position == "") return;
+            int? bufRoot = Root;
 
-            //TGDiagram tgd = new TGDiagram("test", "8,x,9,9,x,x", "");
-            TGDiagram tgd = new TGDiagram(ChordName, Position, Fingering, Root);
 
-            //Console.WriteLine(tgd.IsValid());
+            if (bufRoot == null)
+            {
+                bufRoot = Common.RootIndex(Position);
+            }
+
+
+            TGDiagram tgd = new TGDiagram(ChordName, Position, Fingering, bufRoot);
+
+            for (int i = 0; i < 12; i++)
+            {
+                if (i == Common.RootIndex(Position))
+                {
+                    RootName[i] = Common.RootNameBase[i].PadRight(2) + "※";
+                }
+                else if (tgd.LetterNotations().Contains(Common.RootNameBase[i]))
+                {
+                    RootName[i] = Common.RootNameBase[i].PadRight(2) + "○";
+                }
+                else
+                {
+                    RootName[i] = Common.RootNameBase[i];
+                }
+            }
+
+            //comboBox_root.ItemsSource = new List<string>();
+            //comboBox_root.ItemsSource = RootName;
+
+            comboBox_root.Items.Refresh();
+            
+            comboBox_root.SelectedIndex = (int)bufRoot;
+            
 
 
 
             if (tgd.IsValid())
             {
-                if(Root == null)
-                {
-                    
-                    for (int i=0; i< 12; i++)
-                    {
-                        if (i == Common.RootIndex(Position))
-                        {
-                            RootName[i] = Common.RootNameBase[i] + " ●";
-                        }
-                        else if (tgd.LetterNotations().Contains(Common.RootNameBase[i]))
-                        {
-                            RootName[i] = Common.RootNameBase[i] + " ○";
-                        }
-                        else
-                        {
-                            RootName[i] = Common.RootNameBase[i];
-                        }
-                    }
-                    
-                    Root = Common.RootIndex(Position);
-                }
+                TGDText = String.Empty;
 
-                TGDText = tgd.Stringize();
+                if (FlgAutoNaming)
+                {
+                    //string tmpChordName = tgd.GetAutoName();
+                    //TGDText += tmpChordName;
+                    //ChordName = tmpChordName;
+                    ChordName = tgd.GetAutoName();
+                }
+                
+                //コードネーム
+                if (ChordName != null && ChordName.Trim().Length > 0)
+                {
+                    if (Common.GraphicalLength(ChordName) <= 12)
+                    {
+                        TGDText += "  " + Common.Centering(ChordName, 12);
+                    }
+                    else if (Common.GraphicalLength(ChordName) == 13)
+                    {
+                        TGDText += " " + Common.Centering(ChordName, 12);
+                    }
+                    else
+                    {
+                        TGDText += Common.Centering(ChordName, 12);
+                    }
+                }
+                TGDText += "\r\n";
+
+                TGDText += tgd.Stringize();
+
                 if (FlgLetterNotation)
                 {
                     TGDText += tgd.LetterNotations();
@@ -306,11 +357,11 @@ namespace TGDGenerator
             //Root = null;
 
 
-            for (int i = 0; i < 12; i++)
-            {
-                RootName[i] = Common.RootNameBase[i];
-                //RootName[i] = "hoge";
-            }
+            //for (int i = 0; i < 12; i++)
+            //{
+            //    RootName[i] = Common.RootNameBase[i];
+            //    //RootName[i] = "hoge";
+            //}
             
 
             Root = null;
