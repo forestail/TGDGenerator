@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 //using Microsoft.VisualBasic;
 
 namespace TGDGenerator
@@ -17,7 +13,7 @@ namespace TGDGenerator
         private string[]? PositionArray { get; set; }
 
         private int? Root { get; set; }
-       
+
         private string? Interval { get; set; }
 
 
@@ -31,14 +27,14 @@ namespace TGDGenerator
 
             Position = position;
             Fingering = fingering;
-            
+
             if (Position != null)
             {
                 PositionArray = Position.Split(",");
             }
             Root = root;
 
-            
+
 
         }
 
@@ -69,7 +65,7 @@ namespace TGDGenerator
             //}
 
 
-                        
+
             //result += "\r\n";
 
 
@@ -203,7 +199,7 @@ namespace TGDGenerator
                     }
                 }
 
-                
+
             }
             if (result == 99) result = 0;
 
@@ -224,7 +220,7 @@ namespace TGDGenerator
                         result = test;
                     }
                 }
-                
+
 
             }
             return result;
@@ -256,7 +252,7 @@ namespace TGDGenerator
                 result += "\r\n";
             }
 
-            
+
 
             return result;
         }
@@ -300,7 +296,8 @@ namespace TGDGenerator
                         }
 
 
-                        switch (dinterval){
+                        switch (dinterval)
+                        {
                             case 0:
                                 result += "R ";
                                 break;
@@ -412,7 +409,7 @@ namespace TGDGenerator
         {
 
             int rootNoteIndex;
-            
+
 
             if (Root != null)
             {
@@ -429,6 +426,7 @@ namespace TGDGenerator
 
             if (Interval != null)
             {
+                /*
                 if (Interval.Contains("/4/"))   //III
                 {
                     if (Interval.Contains("/8/"))   //#V
@@ -552,9 +550,266 @@ namespace TGDGenerator
                 }
 
 
+
+                */
+
+
+
+
+                Interval = Interval.Replace("/0/", "");
+                //省略込み（Ｖ）
+                //メジャーコード
+                //if (Interval.Contains("/4/") && Interval.Contains("/7/"))   //IIIとVがある
+                //if (Interval.Contains("/4/"))   //IIIがある
+                if ((Interval.Contains("/4/") && Interval.Contains("/7/"))
+                    || (Interval.Contains("/4/") && !Interval.Contains("/7/") && !Interval.Contains("/8/")))   //IIIとVがある　またはIIIがあって、Vも#Vもない
+                {
+                    Interval = Interval.Replace("/4/", "").Replace("/7/", "");
+
+                    if (Interval == "")
+                    {
+                        result += "";
+                    }
+
+                    else if (Interval.Contains("/11/") && Interval.Contains("/2/") && Interval.Contains("/9/"))   //M7 9 13がある
+                    {
+                        Interval = Interval.Replace("/11/", "").Replace("/2/", "").Replace("/9/", "");
+                        if (Interval == "") result += "Δ13";
+                    }
+                    else if (Interval.Contains("/11/") && Interval.Contains("/9/"))
+                    {
+                        Interval = Interval.Replace("/11/", "").Replace("/9/", "");
+                        if (Interval == "") result += "Δ7/6";
+                    }
+                    else if (Interval.Contains("/2/") && Interval.Contains("/9/"))
+                    {
+                        Interval = Interval.Replace("/2/", "").Replace("/9/", "");
+                        if (Interval == "") result += "6/9";
+                    }
+                    else if (Interval.Contains("/2/"))
+                    {
+                        Interval = Interval.Replace("/2/", "");
+                        if (Interval == "") result += "add9";
+                    }
+                    else if (Interval.Contains("/2/") && Interval.Contains("/11/"))
+                    {
+                        Interval = Interval.Replace("/2/", "").Replace("/11/", "");
+                        if (Interval == "") result += "Δ9";
+                    }
+                    else if (Interval.Contains("/11/"))
+                    {
+                        Interval = Interval.Replace("/11/", "");
+                        if (Interval == "") result += "Δ7";
+                    }
+                    else if (Interval.Contains("/9/"))
+                    {
+                        Interval = Interval.Replace("/9/", "");
+                        if (Interval == "") result += "6";
+                    }
+
+
+
+
+                    //ドミナント系
+                    else if (Interval.Contains("/10/"))   //7がある
+                    {
+                        Interval = Interval.Replace("/10/", "");
+                        if (Interval == "")
+                        {
+                            result += "7";
+                        }
+
+                        else if (Interval.Contains("/2/") && Interval.Contains("/5/") && Interval.Contains("/9/"))
+                        {
+                            Interval = Interval.Replace("/2/", "").Replace("/5/", "").Replace("/9/", "");
+                            if (Interval == "") result += "11/13";
+                        }
+                        else if (Interval.Contains("/5/") && Interval.Contains("/9/"))
+                        {
+                            Interval = Interval.Replace("/5/", "").Replace("/9/", "");
+                            if (Interval == "") result += "7/6/11";
+                        }
+                        else if (Interval.Contains("/2/") && Interval.Contains("/9/"))
+                        {
+                            Interval = Interval.Replace("/2/", "").Replace("/9/", "");
+                            if (Interval == "") result += "13";
+                        }
+                        else if (Interval.Contains("/2/") && Interval.Contains("/5/"))
+                        {
+                            Interval = Interval.Replace("/2/", "").Replace("/5/", "");
+                            if (Interval == "") result += "11";
+                        }
+                        else if (Interval.Contains("/2/"))
+                        {
+                            Interval = Interval.Replace("/2/", "");
+                            if (Interval == "") result += "9";
+                        }
+                        else if (Interval.Contains("/5/"))
+                        {
+                            Interval = Interval.Replace("/5/", "");
+                            if (Interval == "") result += "7/11";
+                        }
+                        else if (Interval.Contains("/9/"))
+                        {
+                            Interval = Interval.Replace("/9/", "");
+                            if (Interval == "") result += "7/6";
+                        }
+                        else
+                        {
+                            result += "?";
+                        }
+
+                    }
+                    else
+                    {
+                        result += "?";
+                    }
+
+                }
+                //sus4系
+                else if (Interval.Contains("/5/") && Interval.Contains("/7/"))   //bIIIとVがある
+                {
+                    Interval = Interval.Replace("/5/", "").Replace("/7/", "");
+
+                    if (Interval.Contains("/10/") && Interval.Contains("/2/") && Interval.Contains("/9/"))
+                    {
+                        Interval = Interval.Replace("/10/", "").Replace("/2/", "").Replace("/9/", "");
+                        if (Interval == "") result += "13 Sus";
+                    }
+                    else if (Interval.Contains("/9/") && Interval.Contains("/10/"))
+                    {
+                        Interval = Interval.Replace("/9/", "").Replace("/10/", "");
+                        if (Interval == "") result += "7/6 Sus";
+                    }
+                    else if (Interval.Contains("/10/"))
+                    {
+                        Interval = Interval.Replace("/10/", "");
+                        if (Interval == "") result += "7 Sus";
+                    }
+                    else
+                    {
+                        result += "?";
+                    }
+
+                }
+                //マイナーコード
+                //else if (Interval.Contains("/3/") && Interval.Contains("/7/"))   //bIIIとVがある
+                //else if (Interval.Contains("/3/"))   //bIIIがある
+                else if ((Interval.Contains("/3/") && Interval.Contains("/7/"))
+                        || (Interval.Contains("/3/") && !Interval.Contains("/7/") && !Interval.Contains("/6/")))   //bIIIとVがある　またはbIIIがあって、VもbVもない
+                {
+                    Interval = Interval.Replace("/3/", "").Replace("/7/", "");
+                    if (Interval == "")
+                    {
+                        result += "m";
+                    }
+
+
+                    else if (Interval.Contains("/11/") && Interval.Contains("/2/"))
+                    {
+                        Interval = Interval.Replace("/11/", "").Replace("/2/", "");
+                        if (Interval == "") result += "mM7/9";
+                    }
+                    else if (Interval.Contains("/11/"))
+                    {
+                        Interval = Interval.Replace("/11/", "");
+                        if (Interval == "") result += "mM7";
+                    }
+                    else if (Interval.Contains("/9/") && Interval.Contains("/2/"))
+                    {
+                        Interval = Interval.Replace("/9/", "").Replace("/2/", "");
+                        if (Interval == "") result += "m 6/9";
+                    }
+                    else if (Interval.Contains("/2/"))
+                    {
+                        Interval = Interval.Replace("/2/", "");
+                        if (Interval == "") result += "m add 9";
+                    }
+                    else if (Interval.Contains("/10/") && Interval.Contains("/5/"))
+                    {
+                        Interval = Interval.Replace("/10/", "").Replace("/5/", "");
+                        if (Interval == "") result += "m7/11";
+                    }
+                    else if (Interval.Contains("/10/") && Interval.Contains("/2/") && Interval.Contains("/5/"))
+                    {
+                        Interval = Interval.Replace("/10/", "").Replace("/2/", "").Replace("/5/", "");
+                        if (Interval == "") result += "m11";
+                    }
+                    else if (Interval.Contains("/10/") && Interval.Contains("/2/"))
+                    {
+                        Interval = Interval.Replace("/10/", "").Replace("/2/", "");
+                        if (Interval == "") result += "m9";
+                    }
+                    else if (Interval.Contains("/10/"))
+                    {
+                        Interval = Interval.Replace("/10/", "");
+                        if (Interval == "") result += "m7";
+                    }
+                    else if (Interval.Contains("/9/"))
+                    {
+                        Interval = Interval.Replace("/9/", "");
+                        if (Interval == "") result += "m6";
+                    }
+                    else
+                    {
+                        result += "?";
+                    }
+
+
+                }
+                //dimコード
+                else if (Interval.Contains("/3/") && Interval.Contains("/6/"))   //bIIIとbVがある
+                {
+                    Interval = Interval.Replace("/3/", "").Replace("/6/", "");
+                    if (Interval == "")
+                    {
+                        result += "dim";
+                    }
+
+                    else if (Interval.Contains("/9/"))
+                    {
+                        Interval = Interval.Replace("/9/", "");
+                        if (Interval == "") result += "o";
+                    }
+                    else if (Interval.Contains("/10/"))
+                    {
+                        Interval = Interval.Replace("/10/", "");
+                        if (Interval == "") result += "m7b5";
+                    }
+                    else
+                    {
+                        result += "?";
+                    }
+
+                }
+                //augコード
+                //else if (Interval.Contains("/4/") && Interval.Contains("/8/"))   //IIIと#Vがある
+                else if (Interval.Contains("/8/"))   //IIIと#Vがある（IIIは省略も可）
+                {
+                    Interval = Interval.Replace("/4/", "").Replace("/8/", "");
+
+                    if (Interval.Contains("/2/") && Interval.Contains("/11/"))
+                    {
+                        Interval = Interval.Replace("/2/", "").Replace("/11/", "");
+                        if (Interval == "") result += "Δ9";
+                    }
+                    else if (Interval.Contains("/11/"))
+                    {
+                        Interval = Interval.Replace("/11/", "");
+                        if (Interval == "") result += "Δ7";
+                    }
+
+
+                    result += "+";
+
+                }
+                else
+                {
+                    result += "?";
+                }
+
             }
 
-            
 
             return result;
         }

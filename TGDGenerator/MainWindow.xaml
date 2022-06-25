@@ -37,7 +37,18 @@
 
                         <mah:Tile x:Name="tile" Content="Gererator" Height="35" Width="290" FontSize="24"/>
 
-
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <Label x:Name="label2" Content="Position (required)" FontSize="20" Margin="10,0,10,0"/>
+                                <TextBox x:Name="textBox_position" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Path=Position, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" FontSize="20" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="textBox_position_PreviewKeyDown" TextChanged="textBox_position_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Label x:Name="label_root" Content="Root" FontSize="20" Margin="0,0,10,0"/>
+                                <ComboBox x:Name="comboBox_root" Width="75" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label1" Content="Chord Name" FontSize="20" Margin="10,0,10,0" />
@@ -50,16 +61,7 @@
                         </StackPanel>
 
 
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Vertical">
-                                <Label x:Name="label2" Content="Position (required)" FontSize="20" Margin="10,0,10,0"/>
-                                <TextBox x:Name="textBox_position" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Path=Position, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" FontSize="20" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="textBox_position_PreviewKeyDown" TextChanged="textBox_position_TextChanged" />
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <Label x:Name="label_root" Content="Root" FontSize="20" Margin="0,0,10,0"/>
-                                <ComboBox x:Name="comboBox_root" Width="75" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
-                            </StackPanel>
-                        </StackPanel>
+
 
                         <Label x:Name="label3" Content="Fingering" FontSize="20" Margin="10,0,10,0"/>
                         <TextBox x:Name="textBox_fingering" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Fingering}" VerticalAlignment="Top" Width="241" FontSize="20" InputMethod.IsInputMethodEnabled="False"/>
