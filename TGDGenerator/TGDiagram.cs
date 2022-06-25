@@ -34,7 +34,7 @@ namespace TGDGenerator
             }
             Root = root;
 
-
+            if (Position == null) Position = "x,x,x,x,x,x";
 
         }
 

@@ -280,71 +280,125 @@ namespace TGDGenerator
 
         private void textBox_position_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(Position != null && textBox_position.SelectionStart == Position.Length)
+            //if(Position != null && textBox_position.SelectionStart == Position.Length)
+            //{
+            //    if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Delete || e.Key == Key.Back)
+            //    {
+            //        e.Handled = false;
+            //    }
+            //    else if (e.Key == Key.Space)
+            //    {
+            //        if (Position != null && Common.CountChar(Position, ',') < 5 && !Position.EndsWith(","))
+            //        {
+            //            Position += ",";
+            //            textBox_position.Select(textBox_position.Text.Length, 0);
+            //            e.Handled = true;
+            //        }else if(Position != null && Common.CountChar(Position, ',') == 5 && !Position.EndsWith(","))
+            //        {
+            //            e.Handled = true;
+            //        }
+
+            //    }
+            //    else if (((e.Key >= Key.D0) && (e.Key <= Key.D9)) || ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)))
+            //    {
+            //        if (Common.CountChar(Position, ',') == 5 && Position.EndsWith("x"))
+            //        {
+            //            e.Handled = true;
+            //        }
+            //        else
+            //        {
+            //            e.Handled = false;
+            //        }
+
+            //    }
+            //    else
+            //    {
+            //        if (Common.CountChar(Position, ',') < 5)
+            //        {
+            //            if (Position.EndsWith(","))
+            //            {
+            //                Position += "x,";
+            //            }
+            //            else
+            //            {
+            //                Position += ",x,";
+            //            }
+            //        }
+            //        else if (Common.CountChar(Position, ',') == 5)
+            //        {
+            //            if (Position.EndsWith(","))
+            //            {
+            //                Position += "x";
+            //            }
+            //            else
+            //            {
+            //                //Position += ",x";
+            //            }
+
+            //        }
+            //        //else if (Position.EndsWith(","))
+            //        //{
+            //        //    Position += "x";
+            //        //}
+            //        textBox_position.Select(textBox_position.Text.Length, 0);
+            //        e.Handled = true;
+            //    }
+            //}
+
+
+            if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Delete || e.Key == Key.Back)
             {
-                if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Delete || e.Key == Key.Back)
+                e.Handled = false;
+            }
+            else if (e.Key == Key.OemPeriod || e.Key == Key.OemComma || e.Key == Key.Decimal)
+            {
+                if (Position != null && Common.CountChar(Position, ',') < 5 && !Position.EndsWith(","))
                 {
-                    e.Handled = false;
-                }
-                else if (e.Key == Key.Space)
-                {
-                    if (Position != null && Common.CountChar(Position, ',') < 5 && !Position.EndsWith(","))
-                    {
-                        Position += ",";
-                        textBox_position.Select(textBox_position.Text.Length, 0);
-                        e.Handled = true;
-                    }else if(Position != null && Common.CountChar(Position, ',') == 5 && !Position.EndsWith(","))
-                    {
-                        e.Handled = true;
-                    }
-
-                }
-                else if (((e.Key >= Key.D0) && (e.Key <= Key.D9)) || ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)))
-                {
-                    if (Common.CountChar(Position, ',') == 5 && Position.EndsWith("x"))
-                    {
-                        e.Handled = true;
-                    }
-                    else
-                    {
-                        e.Handled = false;
-                    }
-
-                }
-                else
-                {
-                    if (Common.CountChar(Position, ',') < 5)
-                    {
-                        if (Position.EndsWith(","))
-                        {
-                            Position += "x,";
-                        }
-                        else
-                        {
-                            Position += ",x,";
-                        }
-                    }
-                    else if (Common.CountChar(Position, ',') == 5)
-                    {
-                        if (Position.EndsWith(","))
-                        {
-                            Position += "x";
-                        }
-                        else
-                        {
-                            //Position += ",x";
-                        }
-
-                    }
-                    //else if (Position.EndsWith(","))
-                    //{
-                    //    Position += "x";
-                    //}
+                    Position += ",";
                     textBox_position.Select(textBox_position.Text.Length, 0);
                     e.Handled = true;
                 }
+                else if (Position != null && Common.CountChar(Position, ',') == 5 && !Position.EndsWith(","))
+                {
+                    e.Handled = true;
+                }
             }
-
+            else if (e.Key == Key.OemPlus || e.Key == Key.Space || e.Key == Key.Add)
+            {
+                if (Position != null && Common.CountChar(Position, ',') <= 3 && !Position.EndsWith(","))
+                {
+                    Position += ",x,";
+                    textBox_position.Select(textBox_position.Text.Length, 0);
+                    e.Handled = true;
+                }
+                else if (Position != null && Common.CountChar(Position, ',') <= 4 && Position.EndsWith(","))
+                {
+                    Position += "x,";
+                    textBox_position.Select(textBox_position.Text.Length, 0);
+                    e.Handled = true;
+                }
+                else if (Position != null && Common.CountChar(Position, ',') == 5 && Position.EndsWith(","))
+                {
+                    Position += "x";
+                    e.Handled = true;
+                }
+                else
+                {
+                    e.Handled = true;
+                }
+            }
+            else if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+            {
+                e.Handled = false;
+            }
+            else if (((e.Key >= Key.D0) && (e.Key <= Key.D9)) || ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)))
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
 
         }
 
