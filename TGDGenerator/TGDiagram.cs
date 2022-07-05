@@ -28,16 +28,30 @@ namespace TGDGenerator
             Position = position;
             Fingering = fingering;
 
+
+            //if (Position == null) Position = "x,x,x,x,x,x";
+            //if (Position == null) Position = "";
+            
+
+            //パラメータのサニタイズ
+            SanitizeParameters();
+
+
+
             if (Position != null)
             {
                 PositionArray = Position.Split(",");
             }
             Root = root;
 
-            if (Position == null) Position = "x,x,x,x,x,x";
+
 
         }
 
+        public string GetPosition()
+        {
+            return Position;
+        }
 
 
         public string Stringize()
@@ -76,14 +90,46 @@ namespace TGDGenerator
             result += "  ";
             foreach (string str in PositionArray)
             {
-                if (str != "x" && int.Parse(str) == 0)
+                string[] tmpStr = str.Split("-");
+                string tmpResult = string.Empty;
+
+                for (int i = 0; i < tmpStr.Length; i++)
                 {
-                    result += "●";
+                    if (i == 0)
+                    {
+                        if (tmpStr[i] != "x" && int.Parse(tmpStr[i]) == 0)
+                        {
+                            tmpResult = "●";
+                        }
+                        
+                    }
+                    else if (i == 1)
+                    {
+                        if (tmpStr[i] != "x" && int.Parse(tmpStr[i]) == 0)
+                        {
+                            tmpResult = "×";
+                        }
+                        
+                    }
+                    else if (i == 2)
+                    {
+                        if (tmpStr[i] != "x" && int.Parse(tmpStr[i]) == 0)
+                        {
+                            tmpResult = "□";
+                        }
+                        
+                    }
                 }
-                else
+
+                if (tmpResult == string.Empty)
                 {
                     result += "  ";
                 }
+                else
+                {
+                    result += tmpResult;
+                }
+
             }
 
             result += "\r\n";
@@ -126,15 +172,46 @@ namespace TGDGenerator
 
                 foreach (string str in PositionArray)
                 {
-                    Console.WriteLine(i);
-                    if (str != "x" && int.Parse(str) == MinFret() + i)
+                    string[] tmpStr = str.Split("-");
+                    string tmpResult = string.Empty;
+
+                    for (int j = 0; j < tmpStr.Length; j++)
                     {
-                        result += "●";
+                        if (j == 0)
+                        {
+                            if (tmpStr[j] != "x" && int.Parse(tmpStr[j]) == MinFret() + i)
+                            {
+                                tmpResult = "●";
+                            }
+
+                        }
+                        else if (j == 1)
+                        {
+                            if (tmpStr[j] != "x" && int.Parse(tmpStr[j]) == MinFret() + i)
+                            {
+                                tmpResult = "×";
+                            }
+
+                        }
+                        else if (j == 2)
+                        {
+                            if (tmpStr[j] != "x" && int.Parse(tmpStr[j]) == MinFret() + i)
+                            {
+                                tmpResult = "□";
+                            }
+
+                        }
                     }
-                    else
+
+                    if (tmpResult == string.Empty)
                     {
                         result += "│";
                     }
+                    else
+                    {
+                        result += tmpResult;
+                    }
+
                 }
                 result += "\r\n  ├┼┼┼┼┤\r\n";
 
@@ -177,9 +254,19 @@ namespace TGDGenerator
 
         public Boolean IsValid()
         {
-            if (Position == null) return false;
+            if (Position == null || Position == "") return false;
             //if (PositionArray.Length > 7) return false;
 
+            foreach (string p in PositionArray)
+            {
+                foreach (string pp in p.Split("-"))
+                {
+                    if (pp != "x")
+                    {
+                        if (int.Parse(pp) > 23) return false;
+                    }
+                }
+            }
 
             return true;
         }
@@ -187,21 +274,25 @@ namespace TGDGenerator
 
         private int MinFret()
         {
-            int result = 99;
+            int result = 9999;
             foreach (var item in PositionArray)
             {
-                if (item != "x")
+                foreach (var subItem in item.Split("-"))
                 {
-                    int test = int.Parse(item);
-                    if (test < result && test != 0)
+                    if (subItem != "x")
                     {
-                        result = test;
+                        int test = int.Parse(subItem);
+                        if (test < result && test != 0)
+                        {
+                            result = test;
+                        }
                     }
                 }
 
 
+
             }
-            if (result == 99) result = 0;
+            if (result == 9999) result = 1;
 
             return result;
         }
@@ -236,10 +327,10 @@ namespace TGDGenerator
 
                 for (int i = 0; i < 6; i++)
                 {
-                    if (PositionArray[i] != "x")
+                    if (PositionArray[i].Split("-")[0] != "x")
                     {
 
-                        result += Common.Fretboard[i, int.Parse(PositionArray[i])].PadRight(2);
+                        result += Common.Fretboard[i, int.Parse(PositionArray[i].Split("-")[0])].PadRight(2);
 
 
                     }
@@ -281,10 +372,10 @@ namespace TGDGenerator
 
                 for (int i = 0; i < 6; i++)
                 {
-                    if (PositionArray[i] != "x")
+                    if (PositionArray[i].Split("-")[0] != "x")
                     {
 
-                        testNoteIndex = Common.NoteIndex(Common.Fretboard[i, int.Parse(PositionArray[i])]);
+                        testNoteIndex = Common.NoteIndex(Common.Fretboard[i, int.Parse(PositionArray[i].Split("-")[0])]);
 
                         if (testNoteIndex < rootNoteIndex)
                         {
@@ -375,10 +466,10 @@ namespace TGDGenerator
 
                 for (int i = 0; i < 6; i++)
                 {
-                    if (PositionArray[i] != "x")
+                    if (PositionArray[i].Split("-")[0] != "x")
                     {
 
-                        testNoteIndex = Common.NoteIndex(Common.Fretboard[i, int.Parse(PositionArray[i])]);
+                        testNoteIndex = Common.NoteIndex(Common.Fretboard[i, int.Parse(PositionArray[i].Split("-")[0])]);
 
                         if (testNoteIndex < rootNoteIndex)
                         {
@@ -812,6 +903,56 @@ namespace TGDGenerator
 
 
             return result;
+        }
+
+
+        public void SanitizeParameters()
+        {
+            //Positionパラメータのサニタイズ
+
+            Position = Position.Trim(' ' , ',' , '　');
+
+
+            if (Common.CountChar(Position, ',') == 0)
+            {
+                Position += ",x,x,x,x,x";
+            }
+            else if (Common.CountChar(Position, ',') == 1)
+            {
+                Position += ",x,x,x,x";
+            }
+            else if (Common.CountChar(Position, ',') == 2)
+            {
+                Position += ",x,x,x";
+            }
+            else if (Common.CountChar(Position, ',') == 3)
+            {
+                Position += ",x,x";
+            }
+            else if (Common.CountChar(Position, ',') == 4)
+            {
+                Position += ",x";
+            }
+            else if (Common.CountChar(Position, ',') == 5)
+            {
+                
+            }
+            else if (Common.CountChar(Position, ',') > 5)
+            {
+                Position = Position.Split(",")[0] + Position.Split(",")[1] + Position.Split(",")[2] + Position.Split(",")[3] + Position.Split(",")[4];
+            }
+
+
+
+            //string ptnPosition = @"^(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*)$";
+            string ptnPosition = @"^(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*)$";
+            Match mPst = Regex.Match(Position, ptnPosition);
+
+            if (!mPst.Success)
+            {
+                Position = "";
+            }
+
         }
 
     }
