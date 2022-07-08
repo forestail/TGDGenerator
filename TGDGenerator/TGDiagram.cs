@@ -107,7 +107,8 @@ namespace TGDGenerator
                     {
                         if (tmpStr[i] != "x" && int.Parse(tmpStr[i]) == 0)
                         {
-                            tmpResult = "×";
+                            //tmpResult = "×";
+                            tmpResult = "Ｘ";
                         }
                         
                     }
@@ -189,7 +190,8 @@ namespace TGDGenerator
                         {
                             if (tmpStr[j] != "x" && int.Parse(tmpStr[j]) == MinFret() + i)
                             {
-                                tmpResult = "×";
+                                //tmpResult = "×";
+                                tmpResult = "Ｘ";
                             }
 
                         }
@@ -939,13 +941,14 @@ namespace TGDGenerator
             }
             else if (Common.CountChar(Position, ',') > 5)
             {
-                Position = Position.Split(",")[0] + Position.Split(",")[1] + Position.Split(",")[2] + Position.Split(",")[3] + Position.Split(",")[4];
+                Position = Position.Split(",")[0] + "," + Position.Split(",")[1] + "," + Position.Split(",")[2] + "," + Position.Split(",")[3] + "," + Position.Split(",")[4];
             }
 
 
 
             //string ptnPosition = @"^(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*),(x|[1-9][0-9]*(-[1-9][0-9]*)*)$";
-            string ptnPosition = @"^(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*)$";
+            //string ptnPosition = @"^(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*),(x|[0-9]+(-[0-9]+)*)$";
+            string ptnPosition = @"^(x|[0-9]{1,2})(-(x|[0-9]{1,2}))*,(x|[0-9]{1,2})(-(x|[0-9]{1,2}))*,(x|[0-9]{1,2})(-(x|[0-9]{1,2}))*,(x|[0-9]{1,2})(-(x|[0-9]{1,2}))*,(x|[0-9]{1,2})(-(x|[0-9]{1,2}))*,(x|[0-9]{1,2})(-(x|[0-9]{1,2}))*$";
             Match mPst = Regex.Match(Position, ptnPosition);
 
             if (!mPst.Success)
