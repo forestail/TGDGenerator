@@ -112,9 +112,9 @@ namespace TGDGenerator
             {
                 for (int i = 0; i < parr.Length; i++)
                 {
-                    if (parr[i] != "x" && int.Parse(parr[i]) <= 24)
+                    if (parr[i].Split("-")[0] != "x" && int.Parse(parr[i].Split("-")[0]) < 24)
                     {
-                        result = Common.Fretboard[i, int.Parse(parr[i])];
+                        result = Common.Fretboard[i, int.Parse(parr[i].Split("-")[0])];
                         break;
                     }
 
@@ -124,6 +124,101 @@ namespace TGDGenerator
 
         }
 
+
+        public static string SlideupPosition(string p)
+        {
+            string result = string.Empty;
+            if (p == null) return result;
+
+            foreach(string items in p.Split(","))
+            {
+                string buf = string.Empty;
+                foreach(string item in items.Split("-"))
+                {
+                    if (item != "x")
+                    {
+                        if (item == "23") //一番ブリッジよりのポジションが23の場合は元のポジションを返す
+                        {
+                            return p;
+                        }
+
+                        if (buf == string.Empty)
+                        {
+                            buf = (int.Parse(item) + 1).ToString();
+                        }
+                        else
+                        {
+                            buf = buf + "-" + (int.Parse(item) + 1).ToString();
+                        }
+                    }
+                    else
+                    {
+                        buf = "x";
+                    }
+                }
+
+                if (result == string.Empty)
+                {
+                    result = buf;
+                }
+                else
+                {
+                    result = result + "," + buf;
+                }
+
+            }
+
+            return result;
+
+        }
+
+
+        public static string SlidedownPosition(string p)
+        {
+            string result = string.Empty;
+            if (p == null) return result;
+
+            foreach (string items in p.Split(","))
+            {
+                string buf = string.Empty;
+                foreach (string item in items.Split("-"))
+                {
+                    if (item != "x")
+                    {
+                        if (item == "0") //一番ナットよりのポジションが0の場合は元のポジションを返す
+                        {
+                            return p;
+                        }
+
+                        if (buf == string.Empty)
+                        {
+                            buf = (int.Parse(item) - 1).ToString();
+                        }
+                        else
+                        {
+                            buf = buf + "-" + (int.Parse(item) - 1).ToString();
+                        }
+                    }
+                    else
+                    {
+                        buf = "x";
+                    }
+                }
+
+                if (result == string.Empty)
+                {
+                    result = buf;
+                }
+                else
+                {
+                    result = result + "," + buf;
+                }
+
+            }
+
+            return result;
+
+        }
 
     }
 }

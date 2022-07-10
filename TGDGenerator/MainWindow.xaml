@@ -10,19 +10,21 @@
         Title="Ted Greene Chord Diagram Generator"
         Height="550" Width="600" 
         ResizeMode="NoResize"
-        ShowTitleBar="True"
-        TitleCharacterCasing="Normal"         
+        ShowTitleBar="True"       
         >
-    <mah:MetroWindow.RightWindowCommands>
+    <!--<mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <Button ToolTip="Settings" Command="{Binding SettingsCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <icon:PackIconModern Width="22" Height="22" Kind="Settings" />
+                    -->
+    <!--<icon:PackIconModern Width="22" Height="22" Kind="Settings" />-->
+    <!--
+                    <icon:PackIconMaterialDesign Width="22" Height="22" Kind="Settings" />
                     <TextBlock Text="Settings" VerticalAlignment="Center" Margin="5,0"/>
                 </StackPanel>
             </Button>
         </mah:WindowCommands>
-    </mah:MetroWindow.RightWindowCommands>
+    </mah:MetroWindow.RightWindowCommands>-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="79*"/>
@@ -32,44 +34,50 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.ColumnSpan="4">
             <StackPanel Orientation="Horizontal">
-                <Grid Width="300">
+                <Grid Width="320">
                     <StackPanel Orientation="Vertical">
 
-                        <mah:Tile x:Name="tile" Content="Gererator" Height="35" Width="290" FontSize="24"/>
+                        <mah:Tile x:Name="tile" Content="Gererator" Height="35" Width="318" FontSize="24" IsTabStop="False"/>
 
                         <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical" FocusManager.FocusedElement="{Binding ElementName=textBox_position}">
                                 <Label x:Name="label2" Content="Position (required)" FontSize="20" Margin="10,0,10,0"/>
-                                <TextBox x:Name="textBox_position" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Path=Position, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" FontSize="20" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="textBox_position_PreviewKeyDown" TextChanged="textBox_position_TextChanged" />
+                                <TextBox x:Name="textBox_position" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="NoWrap" Text="{Binding Path=Position, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" FontSize="20" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="textBox_position_PreviewKeyDown" TextChanged="textBox_position_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="button_up" Margin="0,25,10,0" Click="button_up_Click" IsTabStop="False">
+                                    <icon:PackIconMaterialDesign Width="10" Height="8" Kind="KeyboardArrowUp"/>
+                                </Button>
+                                <Button x:Name="button_down" Margin="0,0,10,0" Click="button_down_Click" IsTabStop="False">
+                                    <icon:PackIconMaterialDesign Width="10" Height="8" Kind="KeyboardArrowDown"/>
+                                </Button>
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label_root" Content="Root" FontSize="20" Margin="0,0,10,0"/>
-                                <ComboBox x:Name="comboBox_root" Width="75" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                                <ComboBox x:Name="comboBox_root" Width="75" FontSize="18" SelectedIndex="{Binding Path=Root}" ItemsSource="{Binding Path=RootName, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" IsTabStop="False" />
                             </StackPanel>
                         </StackPanel>
-                        
-                        
+
+
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label1" Content="Chord Name" FontSize="20" Margin="10,0,10,0" />
-                                <TextBox x:Name="textBox_name" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding ChordName}" Width="182" FontSize="20" />
+                                <TextBox x:Name="textBox_name" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding ChordName}" Width="210" FontSize="20" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="auto_naming" Content="Auto" FontSize="20" Margin="0,0,10,0"/>
-                                <mah:ToggleSwitch x:Name="SwitchAutoNaming"  Width="66" Margin="10,0,10,0" IsOn="{Binding Path=FlgAutoNaming}"/>
+                                <mah:ToggleSwitch x:Name="SwitchAutoNaming"  Width="85" Margin="10,0,10,0" IsOn="{Binding Path=FlgAutoNaming}"/>
                             </StackPanel>
                         </StackPanel>
 
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <Label x:Name="label3" Content="Fingering" FontSize="20" Margin="10,0,10,0"/>
+                                <TextBox x:Name="textBox_fingering" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Fingering}" Width="208" FontSize="20" InputMethod.IsInputMethodEnabled="False"/>
+                            </StackPanel>
 
+                        </StackPanel>
 
-
-                        <Label x:Name="label3" Content="Fingering" FontSize="20" Margin="10,0,10,0"/>
-                        <TextBox x:Name="textBox_fingering" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Fingering}" VerticalAlignment="Top" Width="241" FontSize="20" InputMethod.IsInputMethodEnabled="False"/>
-
-                        <!--<Label x:Name="label4" Content="Position× (after the chord)" FontSize="20" Margin="10,5,10,0"/>
-                        <TextBox x:Name="textBox_position2" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Path=Position2, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="241" FontSize="20" InputMethod.IsInputMethodEnabled="False" />
-                        <Label x:Name="label5" Content="Position□ (after an ×)" FontSize="20" Margin="10,0,10,0"/>
-                        <TextBox x:Name="textBox_position3" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Path=Position3, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="241" FontSize="20" InputMethod.IsInputMethodEnabled="False" />-->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <Label x:Name="label_ln" Content="Show Letter Notations" FontSize="16" Margin="10,0,10,0"/>
                             <mah:ToggleSwitch x:Name="SwitchLetterNotation"  Width="200" Margin="10,0,10,0" IsOn="{Binding Path=FlgLetterNotation}"/>
@@ -78,20 +86,50 @@
                             <Label x:Name="label_degree" Content="Show Degrees         " FontSize="16" Margin="10,0,10,0"/>
                             <mah:ToggleSwitch x:Name="SwitchDegree"  Width="200" Margin="10,0,10,0" IsOn="{Binding Path=FlgDegree}"/>
                         </StackPanel>
-                        <Button x:Name="button_generate" Content="Generate!" FontSize="20" Margin="10,10,10,10" Width="200" Click="button_generate_Click" />
+                        <Button x:Name="button_generate" FontSize="20" Margin="10,30,10,10" Width="200" Click="button_generate_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" IsDefault="True">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <icon:PackIconMaterialDesign Width="25" Height="25" Kind="Create" VerticalAlignment="Center"/>
+                                <Label  Content="Generate!"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="button_clear"  FontSize="20" Margin="10,0,10,10" Width="200" Click="button_clear_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" IsCancel="True">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <icon:PackIconMaterialDesign Width="25" Height="25" Kind="DeleteSweep" VerticalAlignment="Center"/>
+                                <Label Content="Clear" Margin="0,-3,0,-3"/>
+                            </StackPanel>
+                        </Button>
 
 
                     </StackPanel>
                 </Grid>
-                <Grid Width="300">
+                <Grid Width="280">
                     <StackPanel Orientation="Vertical">
-                        <mah:Tile x:Name="tile2" Content="Result" Height="35" Width="290" FontSize="24">
+                        <mah:Tile x:Name="tile2" Content="Result" Height="35" Width="260" FontSize="24" IsTabStop="False">
                             <mah:Tile.Background>
                                 <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent2}"/>
                             </mah:Tile.Background>
                         </mah:Tile>
-                        <TextBox x:Name="textBox_result" TextWrapping="Wrap" Margin="10,10,10,10" AcceptsReturn="True" Height="350" FontSize="20" FontFamily="MS Gothic" Text="{Binding TGDText}"/>
-                        <Button x:Name="button_copy" Content="Copy to Clipboard" FontSize="20" Margin="10,20,10,10" Width="250"  />
+                        <TextBox x:Name="textBox_result" TextWrapping="Wrap" Margin="10,10,10,10" AcceptsReturn="True" Height="340" FontSize="20" FontFamily="MS Gothic" Text="{Binding TGDText}" IsTabStop="False"/>
+                        <StackPanel Orientation="Horizontal" Margin="15,0,10,10" HorizontalAlignment="Left">
+                            <Button x:Name="button_play"  FontSize="20" Width="168"  mah:ControlsHelper.ContentCharacterCasing="Normal" Click="button_play_Click">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <icon:PackIconMaterialDesign Width="25" Height="25" Kind="PlayCircleOutline" VerticalAlignment="Center"/>
+                                    <Label Content="Play Chord" Margin="0,-2,0,-2"/>
+                                </StackPanel>
+                            </Button>
+                            <StackPanel Orientation="Vertical">
+                                <Label Content="Capo" Margin="0,-8,0,0" FontSize="16"/>
+                                <mah:NumericUpDown Width="78" Height="30" Margin="5,0,0,0" UpDownButtonsWidth="22" FontSize="16" Minimum="0" Maximum="12" Value="{Binding Path=Capo}" IsTabStop="False"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button x:Name="button_copy"  FontSize="20" Margin="10,0,10,0" Width="250" Click="button_copy_Click" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <icon:PackIconMaterialDesign Width="25" Height="25" Kind="ContentCopy" VerticalAlignment="Center"/>
+                                <Label Content="Copy to Clipboard" Margin="0,-2,0,-2"/>
+                            </StackPanel>
+                        </Button>
+                        
+
                     </StackPanel>
                 </Grid>
             </StackPanel>
