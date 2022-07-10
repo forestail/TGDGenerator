@@ -12,4 +12,4 @@ By simply entering the left hand position, you can easily check the component no
 Chord diagrams can be generated in plain text, allowing users to create and save their own chord solo notation using various text editors and note tools, including Notepad.
 
 
-<a href="https://forestail.com/en/ted-greene-chord-diagram-generator/">For more information, please click here.</a>
+<a href="https://forestail.com/en/ted-greene-chord-diagram-generator/">For more information, please click here. (Windows exececutable is here)</a>
