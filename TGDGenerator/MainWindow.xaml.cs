@@ -165,7 +165,20 @@ namespace TGDGenerator
 
 
 
-        //度数表示フラグ
+        //Capo
+        private int capo;
+        public int Capo
+        {
+            get
+            {
+                return capo;
+            }
+            set
+            {
+                capo = value;
+                OnPropertyChanged("Capo");
+            }
+        }
 
 
 
@@ -177,6 +190,7 @@ namespace TGDGenerator
 
             Common.Initialize();
             Array.Copy(Common.RootNameBase, RootName, Common.RootNameBase.Length);
+            Capo = 0;
 
         }
 
@@ -193,34 +207,37 @@ namespace TGDGenerator
 
             TGDiagram tgd = new TGDiagram(ChordName, Position, Fingering, bufRoot);
 
-            for (int i = 0; i < 12; i++)
-            {
-                if (i == Common.RootIndex(Position))
-                {
-                    RootName[i] = Common.RootNameBase[i].PadRight(2) + "※";
-                }
-                else if (tgd.LetterNotations().Contains(Common.RootNameBase[i]))
-                {
-                    RootName[i] = Common.RootNameBase[i].PadRight(2) + "○";
-                }
-                else
-                {
-                    RootName[i] = Common.RootNameBase[i];
-                }
-            }
-
-            //comboBox_root.ItemsSource = new List<string>();
-            //comboBox_root.ItemsSource = RootName;
-
-            comboBox_root.Items.Refresh();
-            
-            comboBox_root.SelectedIndex = (int)bufRoot;
-            
-
-
-
             if (tgd.IsValid())
             {
+
+                for (int i = 0; i < 12; i++)
+                {
+                    if (i == Common.RootIndex(Position))
+                    {
+                        RootName[i] = Common.RootNameBase[i].PadRight(2) + "※";
+                    }
+                    else if (tgd.LetterNotations().Contains(Common.RootNameBase[i]))
+                    {
+                        RootName[i] = Common.RootNameBase[i].PadRight(2) + "○";
+                    }
+                    else
+                    {
+                        RootName[i] = Common.RootNameBase[i];
+                    }
+                }
+
+                //comboBox_root.ItemsSource = new List<string>();
+                //comboBox_root.ItemsSource = RootName;
+
+                Position = tgd.GetPosition();
+
+                comboBox_root.Items.Refresh();
+                comboBox_root.SelectedIndex = (int)bufRoot;
+            
+
+
+
+
                 TGDText = String.Empty;
 
                 if (FlgAutoNaming)
@@ -280,79 +297,33 @@ namespace TGDGenerator
 
         private void textBox_position_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            //if(Position != null && textBox_position.SelectionStart == Position.Length)
-            //{
-            //    if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Delete || e.Key == Key.Back)
-            //    {
-            //        e.Handled = false;
-            //    }
-            //    else if (e.Key == Key.Space)
-            //    {
-            //        if (Position != null && Common.CountChar(Position, ',') < 5 && !Position.EndsWith(","))
-            //        {
-            //            Position += ",";
-            //            textBox_position.Select(textBox_position.Text.Length, 0);
-            //            e.Handled = true;
-            //        }else if(Position != null && Common.CountChar(Position, ',') == 5 && !Position.EndsWith(","))
-            //        {
-            //            e.Handled = true;
-            //        }
 
-            //    }
-            //    else if (((e.Key >= Key.D0) && (e.Key <= Key.D9)) || ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)))
-            //    {
-            //        if (Common.CountChar(Position, ',') == 5 && Position.EndsWith("x"))
-            //        {
-            //            e.Handled = true;
-            //        }
-            //        else
-            //        {
-            //            e.Handled = false;
-            //        }
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                switch (e.Key)
+                {
+                    case Key.A:
+                        e.Handled = false;
+                        break;
+                    case Key.X:
+                        e.Handled = false;
+                        break;
+                    case Key.C:
+                        e.Handled = false;
+                        break;
+                    case Key.V:
+                        e.Handled = false;
+                        break;
+                }
+            }
 
-            //    }
-            //    else
-            //    {
-            //        if (Common.CountChar(Position, ',') < 5)
-            //        {
-            //            if (Position.EndsWith(","))
-            //            {
-            //                Position += "x,";
-            //            }
-            //            else
-            //            {
-            //                Position += ",x,";
-            //            }
-            //        }
-            //        else if (Common.CountChar(Position, ',') == 5)
-            //        {
-            //            if (Position.EndsWith(","))
-            //            {
-            //                Position += "x";
-            //            }
-            //            else
-            //            {
-            //                //Position += ",x";
-            //            }
-
-            //        }
-            //        //else if (Position.EndsWith(","))
-            //        //{
-            //        //    Position += "x";
-            //        //}
-            //        textBox_position.Select(textBox_position.Text.Length, 0);
-            //        e.Handled = true;
-            //    }
-            //}
-
-
-            if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Delete || e.Key == Key.Back)
+            else if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Delete || e.Key == Key.Back || e.Key == Key.Tab)
             {
                 e.Handled = false;
             }
             else if (e.Key == Key.OemPeriod || e.Key == Key.OemComma || e.Key == Key.Decimal)
             {
-                if (Position != null && Common.CountChar(Position, ',') < 5 && !Position.EndsWith(","))
+                if (Position != null && Common.CountChar(Position, ',') < 5 && !Position.EndsWith(",") && Position != String.Empty)
                 {
                     Position += ",";
                     textBox_position.Select(textBox_position.Text.Length, 0);
@@ -362,12 +333,29 @@ namespace TGDGenerator
                 {
                     e.Handled = true;
                 }
+                else
+                {
+                    e.Handled = true;
+                }
             }
             else if (e.Key == Key.OemPlus || e.Key == Key.Space || e.Key == Key.Add)
             {
-                if (Position != null && Common.CountChar(Position, ',') <= 3 && !Position.EndsWith(","))
+                if (Position == null)
                 {
-                    Position += ",x,";
+                    Position += "x,";
+                    textBox_position.Select(textBox_position.Text.Length, 0);
+                    e.Handled = true;
+                }
+                else if (Position != null && Common.CountChar(Position, ',') <= 3 && !Position.EndsWith(","))
+                {
+                    if (Position == String.Empty)
+                    {
+                        Position += "x,";
+                    }
+                    else
+                    {
+                        Position += ",x,";
+                    }
                     textBox_position.Select(textBox_position.Text.Length, 0);
                     e.Handled = true;
                 }
@@ -391,7 +379,11 @@ namespace TGDGenerator
             {
                 e.Handled = false;
             }
-            else if (((e.Key >= Key.D0) && (e.Key <= Key.D9)) || ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)))
+            else if (((e.Key >= Key.D0) && (e.Key <= Key.D9)) || ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)) || e.Key == Key.X)
+            {
+                e.Handled = false;
+            }
+            else if (e.Key == Key.Enter || e.Key == Key.Escape)
             {
                 e.Handled = false;
             }
@@ -422,6 +414,38 @@ namespace TGDGenerator
             
             //Array.Copy(Common.RootNameBase, RootName, Common.RootNameBase.Length);
             
+        }
+
+        private void button_copy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetData(DataFormats.Text, TGDText);
+        }
+
+        private void button_clear_Click(object sender, RoutedEventArgs e)
+        {
+            Position = string.Empty;
+            TGDText = string.Empty;
+        }
+
+        private void button_play_Click(object sender, RoutedEventArgs e)
+        {
+            if (TGDText != null && TGDText != String.Empty)
+            {
+                ChordSound cs = new ChordSound(Position, Capo);
+                cs.PlaySound();
+            }
+        }
+
+        private void button_up_Click(object sender, RoutedEventArgs e)
+        {
+            Position = Common.SlideupPosition(Position);
+            button_generate_Click(sender, e);
+        }
+
+        private void button_down_Click(object sender, RoutedEventArgs e)
+        {
+            Position = Common.SlidedownPosition(Position);
+            button_generate_Click(sender, e);
         }
     }
 }
