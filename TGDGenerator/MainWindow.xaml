@@ -62,18 +62,18 @@
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label1" Content="Chord Name" FontSize="20" Margin="10,0,10,0" />
-                                <TextBox x:Name="textBox_name" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding ChordName}" Width="210" FontSize="20" />
+                                <TextBox x:Name="textBox_name" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding ChordName}" Width="210" FontSize="20" KeyDown="textBox_name_KeyDown" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="auto_naming" Content="Auto" FontSize="20" Margin="0,0,10,0"/>
-                                <mah:ToggleSwitch x:Name="SwitchAutoNaming"  Width="85" Margin="10,0,10,0" IsOn="{Binding Path=FlgAutoNaming}"/>
+                                <mah:ToggleSwitch x:Name="SwitchAutoNaming"  Width="85" Margin="10,0,10,0" IsOn="{Binding Path=FlgAutoNaming}" Toggled="SwitchAutoNaming_Toggled" />
                             </StackPanel>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <Label x:Name="label3" Content="Fingering" FontSize="20" Margin="10,0,10,0"/>
-                                <TextBox x:Name="textBox_fingering" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Fingering}" Width="208" FontSize="20" InputMethod.IsInputMethodEnabled="False"/>
+                                <TextBox x:Name="textBox_fingering" HorizontalAlignment="Left" Margin="10,0,10,10" TextWrapping="Wrap" Text="{Binding Fingering}" Width="208" FontSize="20" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="textBox_fingering_PreviewKeyDown"/>
                             </StackPanel>
 
                         </StackPanel>

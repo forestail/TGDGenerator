@@ -447,5 +447,55 @@ namespace TGDGenerator
             Position = Common.SlidedownPosition(Position);
             button_generate_Click(sender, e);
         }
+
+        private void SwitchAutoNaming_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FlgAutoNaming)
+            {
+                textBox_name.IsEnabled = true;
+            }
+            else
+            {
+                textBox_name.IsEnabled = false;
+            }
+        }
+
+        private void textBox_name_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                
+
+                if (Position == null || Position.Trim() == "")
+                {
+                    textBox_position.Focus();
+                }
+                else
+                {
+                    button_generate_Click(sender, e);
+                }
+
+                //e.Handled = true;
+            }
+        }
+
+        private void textBox_fingering_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                
+
+                if (Position == null || Position.Trim() == "")
+                {
+                    textBox_position.Focus();
+                }
+                else
+                {
+                    button_generate_Click(sender, e);
+                }
+
+                //e.Handled = true;
+            }
+        }
     }
 }
